@@ -4,20 +4,19 @@ import sys
 from uuid import uuid4
 from timeit import default_timer as timer
 import random
-import json
 
 
 def proof_of_work(last_proof):
 
 
     start = timer()
+    print("Searching for next proof")
     proof = 0
 
-    print("Searching for next proof")
-    block_string= f'(last_proof)'.encode() #ENCODE LAST PROOF WHICH IS PASSED IN
+    block_string= f'{last_proof}'.encode() #ENCODE LAST PROOF WHICH IS PASSED IN
     hashed = hashlib.sha256(block_string).hexdigest() #HASH IT USING SHA256 AND THEN HEXIDIGEST MAKES IT A READABLE HASH
 
-    while not valid_proof(hashed, proof): #THIS WHILE LOOP USES THE VALID PROOF FUNCTION WHICH WILL ENCODE THE PROOF THEN HASHES IT UNTIL IT MATCHES THE REQUIRED PARAMS WE GAVE IT. IN THIS CASE, MATCH THE FIRST 6 DIGIST WITH THE LAST 6 DIGITS
+    while valid_proof(hashed, proof) is False: #THIS WHILE LOOP USES THE VALID PROOF FUNCTION WHICH WILL ENCODE THE PROOF THEN HASHES IT UNTIL IT MATCHES THE REQUIRED PARAMS WE GAVE IT. IN THIS CASE, MATCH THE FIRST 6 DIGIST WITH THE LAST 6 DIGITS
         proof +=1 #IF IT DOESN'T MATCH INCREASE THIS PROOF COUNT
         # print("increasing", proof)
 
@@ -26,7 +25,7 @@ def proof_of_work(last_proof):
 
 
 def valid_proof(last_hash, proof):
-    guess = f"{proof}".encode()
+    guess = f'{proof}'.encode()
     guess_hash = hashlib.sha256(guess).hexdigest()
     # print("guess ", guess, "guess hash", guess_hash)
 
