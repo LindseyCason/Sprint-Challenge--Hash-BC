@@ -1,46 +1,35 @@
 import hashlib
 import requests
-
 import sys
-
 from uuid import uuid4
-
 from timeit import default_timer as timer
-
 import random
 
 
 def proof_of_work(last_proof):
-    """
-    Multi-Ouroboros of Work Algorithm
-    - Find a number p' such that the last six digits of hash(p) are equal
-    to the first six digits of hash(p')
-    - IE:  last_hash: ...AE9123456, new hash 123456888...
-    - p is the previous proof, and p' is the new proof
-    - Use the same method to generate SHA-256 hashes as the examples in class
-    """
+
 
     start = timer()
-
     print("Searching for next proof")
     proof = 0
-    #  TODO: Your code here
+
+    block_string= f'{last_proof}'.encode() #ENCODE LAST PROOF WHICH IS PASSED IN
+    hashed = hashlib.sha256(block_string).hexdigest() #HASH IT USING SHA256 AND THEN HEXIDIGEST MAKES IT A READABLE HASH
+
+    while valid_proof(hashed, proof) is False: #THIS WHILE LOOP USES THE VALID PROOF FUNCTION WHICH WILL ENCODE THE PROOF THEN HASHES IT UNTIL IT MATCHES THE REQUIRED PARAMS WE GAVE IT. IN THIS CASE, MATCH THE FIRST 6 DIGIST WITH THE LAST 6 DIGITS
+        proof +=1 #IF IT DOESN'T MATCH INCREASE THIS PROOF COUNT
+        # print("increasing", proof)
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
 
 
 def valid_proof(last_hash, proof):
-    """
-    Validates the Proof:  Multi-ouroborus:  Do the last six characters of
-    the hash of the last proof match the first six characters of the hash
-    of the new proof?
+    guess = f'{proof}'.encode()
+    guess_hash = hashlib.sha256(guess).hexdigest()
+    # print("guess ", guess, "guess hash", guess_hash)
 
-    IE:  last_hash: ...AE9123456, new hash 123456E88...
-    """
-
-    # TODO: Your code here!
-    pass
+    return guess_hash[:6] == last_hash[-6:]
 
 
 if __name__ == '__main__':
@@ -48,9 +37,11 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         node = sys.argv[1]
     else:
-        node = "https://lambda-coin.herokuapp.com/api"
+        # node = "https://lambda-coin.herokuapp.com/api"
+        node = "https://lambda-coin-test-1.herokuapp.com/api"
 
     coins_mined = 0
+    print("COINS", coins_mined)
 
     # Load or create ID
     f = open("my_id.txt", "r")

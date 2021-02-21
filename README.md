@@ -24,11 +24,24 @@ This sprint challenge is divided up into three parts:  Hash tables coding, block
 
 Explain in detail the workings of a dynamic array:
 * What is the runtime complexity to access an array, add or remove from the front, and add or remove from the back?
-* What is the worse case scenario if you try to extend the storage size of a dynamic array?
 
-Explain how a blockchain is structured. What are the blocks, what is the chain? How is the data organized?
+#If you're adding to the front, the runtime will be O(n) becuase you'll have to scoot everything down to fit and with adding to the end it'll be O(1) for adding and removing because nothing has to be moved unless there is no more room.
+* What is the worse case scenario if you try to extend the storage size of a dynamic array?
+#Worse case when there is no room and you extend is having to make a new array with new size and then have to copy over each item from the previous array to the new one. O(n)
+
+**Explain how a blockchain is structured. What are the blocks, what is the chain? How is the data organized?**
+Block chains are blocks of data that keep track of a series of transactions. The structure consists of:
+ -An index number which can be initialized to whatever for the first one, this will increment per block.
+ -A timestamp that will update each time a block is mined
+ -A list of transactions which will update as things change
+ -Proof, which will be a number that represents how many times it took to validate. Ex. If you're asking it to match 6 leading number of 0's, it will run through random combinations of numbers until it matches the first 6 numbers as 000000, the proof will be how many checks/guesses it took to match that. Because the numbers are random, this number should never be the same number twice.
+ -Previous hash, every block will have a hash from the block before it, any change to a block before (amount, etc) will alter the hash, this will cause a conflict because the next block has an expected hash, you can tell that that chain has been altered if the hash in the next block does NOT match the previous blocks hash.  
  
-Explain how proof of work functions. How does it operate. How does this protect the chain from attack. What kind of attack is possible?
+*Explain how proof of work functions. How does it operate. How does this protect the chain from attack. What kind of attack is possible?*
+The proof of work is hard to do but easy to verify. It uses a hash algorithm to create a hash which is displayed as a 64 digit hexidecimal number. You give a leading number of zeros you want matched to verify and after numerous random guess and checks, once a match is found, it is validated and coins are awarded. This protects the chain from attack because the server validates the solution of the algorithm, the proof and the hash of the previous block will then be saved in the new block. If something is changed in one of the blocks a NEW solution will be needed for validation and will in turn alter what is needed for validation.
+
+
+
 
 ## Project Set Up
 
